@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Troca-Mundos — Onde a memória encontra quem chegou para ficar</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --teal:    #0A3C49;
+      --teal-mid: #1A5C6E;
+      --terra:   #D16B4B;
+      --gold:    #D6BE34;
+      --sand:    #F5EFE6;
+      --sand-mid: #E8DDD0;
+      --white:   #FFFFFF;
+      --dark:    #2C3E50;
+      --gray:    #6B7280;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--sand);
+      color: var(--dark);
+      line-height: 1.6;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      background: rgba(10, 60, 73, 0.97);
+      backdrop-filter: blur(8px);
+      padding: 0 2rem;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    nav .nav-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+      letter-spacing: 0.04em;
+      font-weight: 700;
+    }
+
+    nav a.nav-cta {
+      background: var(--terra);
+      color: var(--white);
+      padding: 0.45rem 1.2rem;
+      border-radius: 4px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: background 0.2s;
+    }
+    nav a.nav-cta:hover { background: #b85a3b; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      background: var(--teal);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6rem 2rem 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -120px; right: -120px;
+      width: 500px; height: 500px;
+      border-radius: 50%;
+      background: var(--teal-mid);
+      opacity: 0.5;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px; left: -80px;
+      width: 300px; height: 300px;
+      border-radius: 50%;
+      background: rgba(214, 190, 52, 0.08);
+    }
+
+    .hero-inner {
+      max-width: 760px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .hero-logo {
+      width: 280px;
+      max-width: 70vw;
+      margin-bottom: 2.5rem;
+      filter: drop-shadow(0 4px 24px rgba(0,0,0,0.3));
+    }
+
+    .hero-tagline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: var(--white);
+      font-style: italic;
+      margin-bottom: 1.5rem;
+      line-height: 1.4;
+    }
+
+    .hero-divider {
+      width: 60px;
+      height: 3px;
+      background: var(--terra);
+      margin: 0 auto 1.8rem;
+      border-radius: 2px;
+    }
+
+    .hero-desc {
+      font-size: 1.05rem;
+      color: rgba(245, 239, 230, 0.85);
+      margin-bottom: 2.5rem;
+      max-width: 580px;
+      margin-left: auto;
+      margin-right: auto;
+      line-height: 1.75;
+    }
+
+    .hero-desc strong {
+      color: var(--white);
+      font-weight: 600;
+    }
+
+    .hero-cta {
+      display: inline-block;
+      background: var(--terra);
+      color: var(--white);
+      padding: 1rem 2.4rem;
+      border-radius: 6px;
+      font-size: 1rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 20px rgba(209, 107, 75, 0.4);
+    }
+    .hero-cta:hover {
+      background: #b85a3b;
+      transform: translateY(-2px);
+    }
+
+    .hero-note {
+      margin-top: 1.2rem;
+      font-size: 0.82rem;
+      color: rgba(245, 239, 230, 0.5);
+    }
+
+    /* ── PROBLEM ── */
+    .section {
+      padding: 5rem 2rem;
+    }
+
+    .section-inner {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--terra);
+      margin-bottom: 0.75rem;
+    }
+
+    .section-title {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(1.8rem, 4vw, 2.6rem);
+      color: var(--teal);
+      margin-bottom: 1rem;
+      line-height: 1.25;
+    }
+
+    .section-subtitle {
+      font-size: 1.05rem;
+      color: var(--gray);
+      font-style: italic;
+      margin-bottom: 3rem;
+    }
+
+    .problem-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 640px) {
+      .problem-grid { grid-template-columns: 1fr; }
+    }
+
+    .problem-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(10, 60, 73, 0.08);
+    }
+
+    .problem-card-header {
+      padding: 1rem 1.4rem;
+      font-weight: 600;
+      font-size: 0.95rem;
+      color: var(--white);
+    }
+
+    .problem-card-header.terra { background: var(--terra); }
+    .problem-card-header.teal  { background: var(--teal);  }
+
+    .problem-card-body {
+      padding: 1.4rem;
+    }
+
+    .problem-item {
+      margin-bottom: 1.1rem;
+      padding-bottom: 1.1rem;
+      border-bottom: 1px solid var(--sand-mid);
+    }
+    .problem-item:last-child {
+      margin-bottom: 0;
+      padding-bottom: 0;
+      border-bottom: none;
+    }
+
+    .problem-item-title {
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--teal);
+      margin-bottom: 0.3rem;
+    }
+
+    .problem-item-text {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.6;
+    }
+
+    .problem-common {
+      margin-top: 1.5rem;
+      background: var(--gold);
+      border-radius: 8px;
+      padding: 1rem 1.4rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: var(--teal);
+      text-align: center;
+    }
+
+    /* ── HOW ── */
+    .how { background: var(--teal); }
+
+    .how .section-label { color: var(--gold); }
+    .how .section-title { color: var(--white); }
+    .how .section-subtitle { color: rgba(245, 239, 230, 0.6); }
+
+    .how-steps {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 2rem;
+    }
+
+    @media (max-width: 768px) {
+      .how-steps { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 480px) {
+      .how-steps { grid-template-columns: 1fr; }
+    }
+
+    .how-step {
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 1.4rem;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+
+    .how-step-num {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem;
+      font-weight: 700;
+      color: rgba(214, 190, 52, 0.3);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .how-step-time {
+      font-size: 0.72rem;
+      font-weight: 600;
+      color: var(--terra);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 0.5rem;
+    }
+
+    .how-step-title {
+      font-weight: 600;
+      color: var(--white);
+      font-size: 0.95rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .how-step-desc {
+      font-size: 0.84rem;
+      color: rgba(245, 239, 230, 0.65);
+      line-height: 1.6;
+    }
+
+    .how-extras {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+    }
+
+    @media (max-width: 640px) {
+      .how-extras { grid-template-columns: 1fr; }
+    }
+
+    .how-extra {
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 1.2rem 1.4rem;
+      border: 1px solid rgba(214, 190, 52, 0.2);
+    }
+
+    .how-extra-title {
+      font-weight: 600;
+      color: var(--gold);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .how-extra-desc {
+      font-size: 0.84rem;
+      color: rgba(245, 239, 230, 0.65);
+      line-height: 1.6;
+    }
+
+    /* ── VALUE ── */
+    .value-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .value-grid { grid-template-columns: 1fr; }
+    }
+
+    .value-card {
+      background: var(--white);
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 2px 16px rgba(10, 60, 73, 0.08);
+    }
+
+    .value-card-header {
+      padding: 0.9rem 1.4rem;
+      font-weight: 600;
+      font-size: 0.9rem;
+      color: var(--white);
+    }
+
+    .value-card-header.terra { background: var(--terra); }
+    .value-card-header.teal  { background: var(--teal);  }
+    .value-card-header.green { background: #5B7B6B;       }
+
+    .value-card-body {
+      padding: 1.3rem 1.4rem;
+    }
+
+    .value-badge {
+      display: inline-block;
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 0.2rem 0.6rem;
+      border-radius: 3px;
+      margin-bottom: 0.6rem;
+    }
+
+    .value-badge.problema { background: rgba(209,107,75,0.12); color: var(--terra); }
+    .value-badge.solucao  { background: rgba(214,190,52,0.2);  color: #8a7a00; }
+
+    .value-text {
+      font-size: 0.88rem;
+      color: var(--gray);
+      line-height: 1.65;
+      margin-bottom: 1rem;
+    }
+
+    .value-divider {
+      height: 1px;
+      background: var(--sand-mid);
+      margin: 0.9rem 0;
+    }
+
+    /* ── STATS ── */
+    .stats { background: var(--teal); }
+    .stats .section-title { color: var(--white); }
+    .stats .section-label { color: var(--gold); }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+      margin-bottom: 2.5rem;
+    }
+
+    @media (max-width: 768px) {
+      .stats-grid { grid-template-columns: 1fr 1fr; }
+    }
+
+    .stat-card {
+      background: rgba(255,255,255,0.06);
+      border-radius: 10px;
+      padding: 1.5rem 1.2rem;
+      text-align: center;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--terra);
+      line-height: 1;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-label {
+      font-size: 0.82rem;
+      color: rgba(245, 239, 230, 0.7);
+      line-height: 1.5;
+    }
+
+    .stat-sub {
+      font-size: 0.72rem;
+      color: rgba(245, 239, 230, 0.4);
+      font-style: italic;
+      margin-top: 0.3rem;
+    }
+
+    .validation-bar {
+      background: rgba(214, 190, 52, 0.12);
+      border: 1px solid rgba(214, 190, 52, 0.3);
+      border-radius: 8px;
+      padding: 1.2rem 1.6rem;
+      text-align: center;
+    }
+
+    .validation-bar p {
+      font-size: 0.92rem;
+      color: rgba(245, 239, 230, 0.8);
+    }
+
+    .validation-bar strong {
+      color: var(--gold);
+    }
+
+    /* ── WAITLIST ── */
+    .waitlist {
+      background: var(--sand);
+      text-align: center;
+    }
+
+    .waitlist .section-title { color: var(--teal); }
+
+    .waitlist-desc {
+      font-size: 1rem;
+      color: var(--gray);
+      max-width: 500px;
+      margin: 0 auto 2.5rem;
+      line-height: 1.7;
+    }
+
+    .waitlist-cta {
+      display: inline-block;
+      background: var(--terra);
+      color: var(--white);
+      padding: 1.1rem 3rem;
+      border-radius: 6px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.02em;
+      transition: transform 0.2s, background 0.2s;
+      box-shadow: 0 4px 20px rgba(209, 107, 75, 0.35);
+    }
+    .waitlist-cta:hover {
+      background: #b85a3b;
+      transform: translateY(-2px);
+    }
+
+    .waitlist-note {
+      margin-top: 1rem;
+      font-size: 0.82rem;
+      color: var(--gray);
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--teal);
+      padding: 2.5rem 2rem;
+      text-align: center;
+    }
+
+    footer .footer-logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.1rem;
+      color: var(--white);
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    footer .footer-tagline {
+      font-size: 0.85rem;
+      color: rgba(245, 239, 230, 0.5);
+      font-style: italic;
+      margin-bottom: 1rem;
+    }
+
+    footer .footer-links {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    footer .footer-links a {
+      font-size: 0.82rem;
+      color: rgba(245, 239, 230, 0.5);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+    footer .footer-links a:hover { color: var(--white); }
+
+    footer .footer-quote {
+      margin-top: 1.5rem;
+      font-size: 0.8rem;
+      color: rgba(245, 239, 230, 0.3);
+      font-style: italic;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- NAV -->
+  <nav>
+    <span class="nav-logo">Troca-Mundos</span>
+    <a href="https://docs.google.com/forms/d/e/1FAIpQLScaz2mzK3-ERpayoRDSSXvArD2BXYOnNEFJ4AuOca7rVxN_rA/viewform?usp=header" target="_blank" class="nav-cta">Quero fazer parte</a>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-inner">
+      <img src="logo.png" alt="Troca-Mundos" class="hero-logo">
+      <p class="hero-tagline">Onde a memória encontra quem chegou para ficar.</p>
+      <div class="hero-divider"></div>
+      <p class="hero-desc">
+        Há pessoas que chegaram a Portugal e ainda não pertencem de verdade.<br>
+        E há pessoas que sempre estiveram aqui — com décadas de histórias que ninguém ouve.<br>
+        <strong>O Troca-Mundos existe para que esses dois mundos se encontrem.</strong>
+      </p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScaz2mzK3-ERpayoRDSSXvArD2BXYOnNEFJ4AuOca7rVxN_rA/viewform?usp=header" target="_blank" class="hero-cta">Entra na lista de espera</a>
+      <p class="hero-note">Piloto a lançar em Lisboa · Gratuito para idosos</p>
+    </div>
+  </section>
+
+  <!-- PROBLEM -->
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-label">O problema</p>
+      <h2 class="section-title">Duas comunidades. Duas solidões.</h2>
+      <p class="section-subtitle">O mesmo espaço — mas nunca o mesmo encontro.</p>
+
+      <div class="problem-grid">
+        <div class="problem-card">
+          <div class="problem-card-header terra">Expats & Imigrantes</div>
+          <div class="problem-card-body">
+            <div class="problem-item">
+              <p class="problem-item-title">Solidão do expat</p>
+              <p class="problem-item-text">84% tem poucos ou nenhuns amigos portugueses — mesmo após anos de residência.</p>
+            </div>
+            <div class="problem-item">
+              <p class="problem-item-title">Relações superficiais</p>
+              <p class="problem-item-text">Eventos, networking, aulas — mas nada que crie pertença real à cultura local.</p>
+            </div>
+            <div class="problem-item">
+              <p class="problem-item-title">Barreiras culturais</p>
+              <p class="problem-item-text">69% quer conhecer portugueses autenticamente mas não sabe como fazê-lo.</p>
+            </div>
+            <div class="problem-item">
+              <p class="problem-item-title">Falta de terceiros espaços</p>
+              <p class="problem-item-text">Não existem estruturas que facilitem encontros significativos com a comunidade local.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="problem-card">
+          <div class="problem-card-header teal">Idosos Locais</div>
+          <div class="problem-card-body">
+            <div class="problem-item">
+              <p class="problem-item-title">Isolamento social crescente</p>
+              <p class="problem-item-text">44.500 idosos vivem sozinhos ou em vulnerabilidade só em Lisboa (GNR, 2022).</p>
+            </div>
+            <div class="problem-item">
+              <p class="problem-item-title">Invisibilidade intergeracional</p>
+              <p class="problem-item-text">70% da população com +65 anos experiencia solidão de forma significativa.</p>
+            </div>
+            <div class="problem-item">
+              <p class="problem-item-title">Perda de reconhecimento</p>
+              <p class="problem-item-text">Décadas de história e saberes únicos que ninguém ouve — e que correm risco de se perder.</p>
+            </div>
+            <div class="problem-item">
+              <p class="problem-item-title">Rotinas pouco estimulantes</p>
+              <p class="problem-item-text">Baixa exposição a experiências novas e ausência de espaços de partilha significativos.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="problem-common">
+        Necessidade comum: relações humanas genuínas, sentido de pertença e experiências com valor emocional real.
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW -->
+  <section class="section how">
+    <div class="section-inner">
+      <p class="section-label">Como funciona</p>
+      <h2 class="section-title">Três momentos. Um encontro real.</h2>
+      <p class="section-subtitle">Sessões semanais de 90 minutos · Grupos de até 10 pessoas · Lisboa</p>
+
+      <div class="how-steps">
+        <div class="how-step">
+          <div class="how-step-num">01</div>
+          <div class="how-step-time">10 min</div>
+          <div class="how-step-title">Abertura colectiva</div>
+          <div class="how-step-desc">Todos juntos. Tema da sessão, quebra-gelo, apresentações. As pessoas vêem quem está na sala antes de se sentarem a dois.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">02</div>
+          <div class="how-step-time">55 min</div>
+          <div class="how-step-title">Mesas em pares</div>
+          <div class="how-step-desc">Matching por perfil e nível de português. 1 expat + 1 idoso, conversa real sobre o tema da semana.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">03</div>
+          <div class="how-step-time">15 min</div>
+          <div class="how-step-title">Fecho colectivo</div>
+          <div class="how-step-desc">Todos juntos outra vez. Cada par partilha um momento. As histórias são registadas para o arquivo de memória oral público.</div>
+        </div>
+        <div class="how-step">
+          <div class="how-step-num">04</div>
+          <div class="how-step-time">Legado</div>
+          <div class="how-step-title">Arquivo de Memória</div>
+          <div class="how-step-desc">Cada sessão gera áudio, transcrições e fotografias. Um arquivo oral vivo da cidade, acessível a todos, para sempre.</div>
+        </div>
+      </div>
+
+      <div class="how-extras">
+        <div class="how-extra">
+          <div class="how-extra-title">✦ Sessões Especiais</div>
+          <div class="how-extra-desc">Para além das sessões temáticas regulares, o Troca-Mundos organiza experiências conjuntas: fanzines colaborativas, ensaios fotográficos, sessões de culinária — criando memórias partilhadas e não só conversas.</div>
+        </div>
+        <div class="how-extra">
+          <div class="how-extra-title">✦ 5 Temas em Ciclo Mensal</div>
+          <div class="how-extra-desc">Gastronomia · Memória · Bairros · Família · Vida quotidiana. Cada tema abre uma janela diferente para a cidade — e para quem a viveu.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- VALUE -->
+  <section class="section">
+    <div class="section-inner">
+      <p class="section-label">Proposta de valor</p>
+      <h2 class="section-title">Para cada um, algo único.</h2>
+      <p class="section-subtitle">Encontros intergeracionais com curadoria personalizada — combatendo a solidão urbana e dando acesso exclusivo à memória viva da cidade.</p>
+
+      <div class="value-grid">
+        <div class="value-card">
+          <div class="value-card-header terra">Expats & Imigrantes</div>
+          <div class="value-card-body">
+            <span class="value-badge problema">Problema</span>
+            <p class="value-text">Vivem em Portugal mas não pertencem de verdade — relações superficiais, barreiras culturais e a "solidão do expat" mesmo em cidades vibrantes.</p>
+            <div class="value-divider"></div>
+            <span class="value-badge solucao">Solução</span>
+            <p class="value-text">Encontros semanais curados com idosos locais — conversas reais sobre a cidade, a sua cultura e memória. Pertença genuína, não turismo cultural.</p>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-card-header teal">Idosos Locais</div>
+          <div class="value-card-body">
+            <span class="value-badge problema">Problema</span>
+            <p class="value-text">Isolamento social crescente, perda de sentido de utilidade e reconhecimento, apesar de terem décadas de histórias e saberes únicos.</p>
+            <div class="value-divider"></div>
+            <span class="value-badge solucao">Solução</span>
+            <p class="value-text">São o especialista na sala — não o beneficiário. As suas histórias ficam preservadas num arquivo de memória oral público, com o seu nome.</p>
+          </div>
+        </div>
+
+        <div class="value-card">
+          <div class="value-card-header green">Parceiros Institucionais</div>
+          <div class="value-card-body">
+            <span class="value-badge problema">Problema</span>
+            <p class="value-text">Necessidade de gerar impacto social documentado e aproximar comunidades — mas sem recursos para criar programas próprios.</p>
+            <div class="value-divider"></div>
+            <span class="value-badge solucao">Solução</span>
+            <p class="value-text">Parceria de interesse público sem custos: espaços e redes institucionais que geram coesão social, visibilidade e legado cultural.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- STATS -->
+  <section class="section stats">
+    <div class="section-inner">
+      <p class="section-label">O mercado</p>
+      <h2 class="section-title">A necessidade é real. E grande.</h2>
+
+      <div class="stats-grid">
+        <div class="stat-card">
+          <div class="stat-number">300K+</div>
+          <div class="stat-label">residentes estrangeiros em Portugal</div>
+          <div class="stat-sub">crescimento de 47% em 5 anos</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">100K</div>
+          <div class="stat-label">expats na área metropolitana de Lisboa</div>
+          <div class="stat-sub">mercado imediato</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">2,3M</div>
+          <div class="stat-label">portugueses com mais de 65 anos</div>
+          <div class="stat-sub">22% da população nacional</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">70%</div>
+          <div class="stat-label">experiencia solidão de forma significativa</div>
+          <div class="stat-sub">44.500 sozinhos só em Lisboa</div>
+        </div>
+      </div>
+
+      <div class="validation-bar">
+        <p>Validação antecipada: <strong>83% dos respondentes ao questionário de pré-lançamento</strong> pediu para ser notificado antes de existir qualquer produto.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- WAITLIST -->
+  <section class="section waitlist">
+    <div class="section-inner">
+      <p class="section-label">Lista de espera</p>
+      <h2 class="section-title">Faz parte desde o início.</h2>
+      <p class="waitlist-desc">O piloto arranca em Lisboa em breve. Se quiseres ser das primeiras pessoas a participar — ou a trazer o Troca-Mundos para a tua cidade — começa aqui.</p>
+      <a href="https://docs.google.com/forms/d/e/1FAIpQLScaz2mzK3-ERpayoRDSSXvArD2BXYOnNEFJ4AuOca7rVxN_rA/viewform?usp=header" target="_blank" class="waitlist-cta">Entra na lista de espera</a>
+      <p class="waitlist-note">Prometemos não encher a caixa — só avisamos quando for altura.</p>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="footer-logo">Troca-Mundos</div>
+    <div class="footer-tagline">Onde a memória encontra quem chegou para ficar.</div>
+    <div class="footer-links">
+      <a href="https://instagram.com/trocamundos" target="_blank">@trocamundos</a>
+      <a href="mailto:trocamundos@gmail.com">trocamundos@gmail.com</a>
+    </div>
+    <div class="footer-quote">"O que a memória ama, fica eterno."</div>
+  </footer>
+
+</body>
+</html>
